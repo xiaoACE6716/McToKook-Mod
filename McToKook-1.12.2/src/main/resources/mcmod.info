@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "mctokook",
+    "name": "McToKook",
+    "description": "这是一个可以让MC的聊天与指定的一个Kook的频道互通的mcmod 版本: 1.12.2",
+    "version": "1.0",
+    "mcversion": "1.12.2",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "xiaoACE"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]
