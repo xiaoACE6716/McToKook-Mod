@@ -3,10 +3,13 @@ package com.xiaoace.mctokook.listener.minecraft;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.KBCClient;
+
+import java.util.concurrent.CompletableFuture;
 
 public class OnPlayerMessage {
 
@@ -15,19 +18,27 @@ public class OnPlayerMessage {
     @SubscribeEvent
     public void onChat(ServerChatEvent event){
 
-        String messageString = event.getMessage();
-        String playerName = event.getUsername();
+        CompletableFuture.runAsync(() ->{
 
-        String needFormatString = "玩家: %s 说: %s";
+            String messageString = event.getMessage();
+            String playerName = event.getUsername();
 
-        String formattedNessage = String.format(needFormatString,playerName,messageString);
+            String needFormatString = "玩家: %s 说: %s";
 
-        Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
+            String formattedNessage = String.format(needFormatString,playerName,messageString);
 
-        if (channel instanceof TextChannel){
-            TextChannel textChannel = (TextChannel) channel;
-            textChannel.sendComponent(formattedNessage);
-        }
+            Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
+
+            if (channel instanceof TextChannel){
+                TextChannel textChannel = (TextChannel) channel;
+                textChannel.sendComponent(formattedNessage);
+            }
+
+        });
+
+        FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(() ->{
+
+        });
 
     }
 
