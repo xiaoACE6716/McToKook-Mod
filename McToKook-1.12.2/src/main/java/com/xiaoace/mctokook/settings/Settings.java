@@ -24,7 +24,6 @@ public class Settings {
     public static void onConfigChange(ConfigChangedEvent event) {
         if (event.getModID().equals(McToKook.MOD_ID)) {
             ConfigManager.sync(McToKook.MOD_ID, Config.Type.INSTANCE);
-            Minecraft.getMinecraft().renderGlobal.loadRenderers();
         }
     }
 
