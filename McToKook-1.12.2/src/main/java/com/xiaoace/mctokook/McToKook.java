@@ -1,7 +1,9 @@
 package com.xiaoace.mctokook;
 
 import com.xiaoace.mctokook.listener.KookListener;
+import com.xiaoace.mctokook.listener.minecraft.OnPlayerJoin;
 import com.xiaoace.mctokook.listener.minecraft.OnPlayerMessage;
+import com.xiaoace.mctokook.listener.minecraft.OnPlayerQuit;
 import com.xiaoace.mctokook.settings.Settings;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -74,13 +76,13 @@ public class McToKook {
 
         if (bot_token.equals("No token provided")){
             logger.info("你没有提供bot-token或者bot-token不正确");
-            //getLogger().log(Level.SEVERE,bot_token);
-            return;
+            logger.info("McToKook-Mod将会停用");
+            throw new Error("你没有提供bot-token或者bot-token不正确,McToKook-Mod将会停用,服务端即将崩溃");
         } else {
             if (channel_ID.equals("No channel ID provided")){
                 logger.info("你没有提供channel ID或channel ID不正确");
                 logger.info("你所提供的channel_ID: " + channel_ID);
-                return;
+                throw new Error("你没有提供channel ID或channel ID不正确,McToKook-Mod将会停用,服务端即将崩溃");
             }
         }
 
@@ -88,12 +90,10 @@ public class McToKook {
 
         kbcClient.start();
         TextChannel channel = (TextChannel) kbcClient.getCore().getHttpAPI().getChannel(channel_ID);
-        channel.sendComponent("您正在使用McToKook-Mod版");
 
         //注册KOOK消息监听器
         //夏夜说: 不要用InternalPlugin,但是我摆了！
         kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(),new KookListener());
-
     }
 
     @Mod.EventHandler
@@ -104,7 +104,8 @@ public class McToKook {
     public void postinit(FMLPostInitializationEvent event) {
 
         MinecraftForge.EVENT_BUS.register(new OnPlayerMessage());
-
+        MinecraftForge.EVENT_BUS.register(new OnPlayerJoin());
+        MinecraftForge.EVENT_BUS.register(new OnPlayerQuit());
     }
 
     //KookBC保存配置文件 爱来自夏夜

@@ -2,32 +2,28 @@ package com.xiaoace.mctokook.listener.minecraft;
 
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.KBCClient;
 
 import java.util.concurrent.CompletableFuture;
 
-public class OnPlayerMessage {
+public class OnPlayerJoin {
 
     static KBCClient kbcClient = McToKook.getKbcClient();
 
     @SubscribeEvent
-    public void onChat(ServerChatEvent event){
-
-        //我用 MinecraftServer#addScheduledTask 会让聊天消息有延迟
-        //等一个佬的回答
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent loggedInEvent){
 
         CompletableFuture.runAsync(() ->{
 
-            String messageString = event.getMessage();
-            String playerName = event.getUsername();
+            String playerName = loggedInEvent.player.getName();
 
-            String needFormatString = "玩家: %s 说: %s";
+            String needFormatString = "%s偷偷的溜进了服务器";
 
-            String formattedMessage = String.format(needFormatString,playerName,messageString);
+            String formattedMessage = String.format(needFormatString,playerName);
 
             Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
 
@@ -36,6 +32,6 @@ public class OnPlayerMessage {
                 textChannel.sendComponent(formattedMessage);
             }
         });
-    }
 
+    }
 }

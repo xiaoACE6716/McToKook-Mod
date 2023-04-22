@@ -2,10 +2,8 @@ package com.xiaoace.mctokook.listener;
 
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import snw.jkook.config.file.FileConfiguration;
 import snw.jkook.entity.User;
 import snw.jkook.event.EventHandler;
 import snw.jkook.event.Listener;
@@ -42,13 +40,11 @@ public class KookListener implements Listener {
                 //测试用的
                 McToKook.logger.info("来自KOOK的消息: " + textComponent);
 
-                MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
-
                 String needFormatMessage = "用户: %s 说: %s";
 
                 TextComponentString message = new TextComponentString(String.format(needFormatMessage, kookUserNickName, textComponent));
-                server.getPlayerList().sendMessage(message);
 
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(message);
             }
         }
     }
