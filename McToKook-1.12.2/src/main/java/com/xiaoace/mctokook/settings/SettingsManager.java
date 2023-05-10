@@ -21,8 +21,8 @@ public class SettingsManager {
         String botToken = Settings.bot_token;
         String channelID = Settings.channel_ID;
 
-        System.out.println("botToken: " +botToken);
-        System.out.println("channelID: " +channelID);
+        System.out.println("botToken: " + botToken);
+        System.out.println("channelID: " + channelID);
 
         // 使用 botToken 和 channelID 值做进一步处理
 

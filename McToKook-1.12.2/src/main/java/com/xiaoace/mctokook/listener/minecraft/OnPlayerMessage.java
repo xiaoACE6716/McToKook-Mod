@@ -15,23 +15,22 @@ public class OnPlayerMessage {
     static KBCClient kbcClient = McToKook.getKbcClient();
 
     @SubscribeEvent
-    public void onChat(ServerChatEvent event){
+    public void onChat(ServerChatEvent event) {
 
-        //我用 MinecraftServer#addScheduledTask 会让聊天消息有延迟
-        //等一个佬的回答
+        CompletableFuture.runAsync(() -> {
 
-        CompletableFuture.runAsync(() ->{
-
-            String messageString = event.getMessage();
+            String message = event.getMessage();
             String playerName = event.getUsername();
 
-            String needFormatString = "玩家: %s 说: %s";
+            String needFormatMessage = Settings.to_Kook_Message;
 
-            String formattedMessage = String.format(needFormatString,playerName,messageString);
+            String formattedMessage = needFormatMessage
+                    .replaceAll("\\{playerName}", playerName)
+                    .replaceAll("\\{message}", message);
 
-            Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
+            Channel channel = kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
 
-            if (channel instanceof TextChannel){
+            if (channel instanceof TextChannel) {
                 TextChannel textChannel = (TextChannel) channel;
                 textChannel.sendComponent(formattedMessage);
             }

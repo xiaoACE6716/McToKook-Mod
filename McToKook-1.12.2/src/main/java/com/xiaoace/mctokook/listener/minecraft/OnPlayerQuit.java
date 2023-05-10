@@ -15,19 +15,23 @@ public class OnPlayerQuit {
     static KBCClient kbcClient = McToKook.getKbcClient();
 
     @SubscribeEvent
-    public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent loggedOutEvent){
+    public void onPlayerQuit(PlayerEvent.PlayerLoggedOutEvent loggedOutEvent) {
 
-        CompletableFuture.runAsync(() ->{
+        if (!Settings.quit_Message) {
+            return;
+        }
+
+        CompletableFuture.runAsync(() -> {
 
             String playerName = loggedOutEvent.player.getName();
 
-            String needFormatString = "肝帝%s歇逼了";
+            String needFormatMessage = Settings.player_Quit_Message;
 
-            String formattedMessage = String.format(needFormatString,playerName);
+            String formattedMessage = needFormatMessage.replaceAll("\\{playerName}", playerName);
 
-            Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
+            Channel channel = kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
 
-            if (channel instanceof TextChannel){
+            if (channel instanceof TextChannel) {
                 TextChannel textChannel = (TextChannel) channel;
                 textChannel.sendComponent(formattedMessage);
             }

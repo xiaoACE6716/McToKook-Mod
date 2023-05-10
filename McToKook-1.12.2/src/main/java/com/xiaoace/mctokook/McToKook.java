@@ -39,10 +39,11 @@ public class McToKook {
     public static final String VERSION = "1.0";
     public static final boolean serverSideOnly = true;
 
-    private static File kbcSetting = new File(".","config/McToKook/kbc.yml");
-    private static File configFolder = new File(".","config/McToKook");
+    private static File kbcSetting = new File(".", "config/McToKook/kbc.yml");
+    private static File configFolder = new File(".", "config/McToKook");
 
     static KBCClient kbcClient = null;
+
     //提供一个get KookBC的方法
     public static KBCClient getKbcClient() {
         return kbcClient;
@@ -55,11 +56,11 @@ public class McToKook {
     public static McToKook INSTANCE;
 
     @Mod.EventHandler
-    public void preinit(FMLPreInitializationEvent event){
+    public void preinit(FMLPreInitializationEvent event) {
 
         logger.info("Hello Forge! Here is McToKooK");
 
-        if (!configFolder.exists()){
+        if (!configFolder.exists()) {
             configFolder.mkdir();
         }
         //KookBC保存基础配置文件
@@ -74,26 +75,26 @@ public class McToKook {
         String bot_token = Settings.bot_token;
         String channel_ID = Settings.channel_ID;
 
-        if (bot_token.equals("No token provided")){
+        if (bot_token.equals("No token provided")) {
             logger.info("你没有提供bot-token或者bot-token不正确");
             logger.info("McToKook-Mod将会停用");
             throw new Error("你没有提供bot-token或者bot-token不正确,McToKook-Mod将会停用,服务端即将崩溃");
         } else {
-            if (channel_ID.equals("No channel ID provided")){
+            if (channel_ID.equals("No channel ID provided")) {
                 logger.info("你没有提供channel ID或channel ID不正确");
                 logger.info("你所提供的channel_ID: " + channel_ID);
                 throw new Error("你没有提供channel ID或channel ID不正确,McToKook-Mod将会停用,服务端即将崩溃");
             }
         }
 
-        kbcClient = new KBCClient(core,config,null,bot_token);
+        kbcClient = new KBCClient(core, config, null, bot_token);
 
         kbcClient.start();
         TextChannel channel = (TextChannel) kbcClient.getCore().getHttpAPI().getChannel(channel_ID);
 
         //注册KOOK消息监听器
         //夏夜说: 不要用InternalPlugin,但是我摆了！
-        kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(),new KookListener());
+        kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(), new KookListener());
     }
 
     @Mod.EventHandler

@@ -15,19 +15,23 @@ public class OnPlayerJoin {
     static KBCClient kbcClient = McToKook.getKbcClient();
 
     @SubscribeEvent
-    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent loggedInEvent){
+    public void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent loggedInEvent) {
 
-        CompletableFuture.runAsync(() ->{
+        if (!Settings.join_Message) {
+            return;
+        }
+
+        CompletableFuture.runAsync(() -> {
 
             String playerName = loggedInEvent.player.getName();
 
-            String needFormatString = "%s偷偷的溜进了服务器";
+            String needFormatMessage = Settings.player_Join_Message;
 
-            String formattedMessage = String.format(needFormatString,playerName);
+            String formattedMessage = needFormatMessage.replaceAll("\\{playerName}", playerName);
 
-            Channel channel =  kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
+            Channel channel = kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
 
-            if (channel instanceof TextChannel){
+            if (channel instanceof TextChannel) {
                 TextChannel textChannel = (TextChannel) channel;
                 textChannel.sendComponent(formattedMessage);
             }

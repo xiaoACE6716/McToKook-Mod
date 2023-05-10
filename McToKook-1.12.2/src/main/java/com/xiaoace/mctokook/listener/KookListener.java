@@ -12,16 +12,22 @@ import snw.jkook.message.TextChannelMessage;
 import snw.jkook.message.component.BaseComponent;
 import snw.jkook.message.component.TextComponent;
 
+import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
+
 public class KookListener implements Listener {
 
     //Kook消息监听器
     @EventHandler
-    public void onKookMessage(ChannelMessageEvent channelMessageEvent){
+    public void onKookMessage(ChannelMessageEvent channelMessageEvent) {
+
+        if (!Settings.to_Minecraft) {
+            return;
+        }
 
         User kookUser = null;
         TextChannelMessage kookMessage = null;
 
-        if (channelMessageEvent.getChannel().getId().equals(Settings.channel_ID)){
+        if (channelMessageEvent.getChannel().getId().equals(Settings.channel_ID)) {
 
             String KookUserUUID = channelMessageEvent.getMessage().getSender().getId();
             //Kook消息发送者
@@ -33,16 +39,20 @@ public class KookListener implements Listener {
             BaseComponent component = kookMessage.getComponent();
             //将要发送至mc里的消息
             //没错，只有文字消息会被发到mc
-            if (component instanceof TextComponent){
+            if (component instanceof TextComponent) {
 
                 TextComponent textComponent = (TextComponent) component;
 
                 //测试用的
                 McToKook.logger.info("来自KOOK的消息: " + textComponent);
 
-                String needFormatMessage = "用户: %s 说: %s";
+                String needFormatMessage = Settings.to_Minecraft_Message;
 
-                TextComponentString message = new TextComponentString(String.format(needFormatMessage, kookUserNickName, textComponent));
+                String formattedMessage = needFormatMessage
+                        .replaceAll("\\{nickName}", kookUserNickName)
+                        .replaceAll("\\{message}", convertToMinecraftFormat(textComponent.toString()));
+
+                TextComponentString message = new TextComponentString(formattedMessage);
 
                 FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(message);
             }
