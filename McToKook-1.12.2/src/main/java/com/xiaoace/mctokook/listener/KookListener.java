@@ -1,5 +1,6 @@
 package com.xiaoace.mctokook.listener;
 
+import cn.hutool.extra.emoji.EmojiUtil;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
 import net.minecraft.util.text.TextComponentString;
@@ -15,6 +16,12 @@ import snw.jkook.message.component.TextComponent;
 import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
 
 public class KookListener implements Listener {
+
+    private final McToKook mod;
+
+    public KookListener(McToKook mod){
+        this.mod = mod;
+    }
 
     //Kook消息监听器
     @EventHandler
@@ -43,6 +50,11 @@ public class KookListener implements Listener {
 
                 TextComponent textComponent = (TextComponent) component;
 
+                //先将kook的消息里的emoji转换成短码形式
+                String the_message_from_kook = EmojiUtil.toAlias(component.toString());
+                //然后再将它转成对应的韩文
+                the_message_from_kook = mod.getEmojiHandler().toEmoji(the_message_from_kook);
+
                 //测试用的
                 McToKook.logger.info("来自KOOK的消息: " + textComponent);
 
@@ -50,7 +62,7 @@ public class KookListener implements Listener {
 
                 String formattedMessage = needFormatMessage
                         .replaceAll("\\{nickName}", kookUserNickName)
-                        .replaceAll("\\{message}", convertToMinecraftFormat(textComponent.toString()));
+                        .replaceAll("\\{message}", convertToMinecraftFormat(the_message_from_kook));
 
                 TextComponentString message = new TextComponentString(formattedMessage);
 

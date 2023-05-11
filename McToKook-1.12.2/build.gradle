@@ -76,9 +76,11 @@ configurations {
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     shade 'com.github.SNWCreations:Kookbc:0.26.13'
+    shade 'com.vdurmont:emoji-java:5.1.1'
+    shade 'cn.hutool:hutool-all:5.8.18'
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -102,9 +104,10 @@ shadowJar {
     configurations = [project.configurations.shade]
     exclude('org/spongepowered/')
     exclude('META-INF/versions/')
-    relocate('snw.kookbc','com.xiaoACE.snw.kookbc')
-    relocate('com.google.gson','com.xiaoACE.com.google.gson')
-    relocate('org.yaml.snakeyaml', 'com.xiaoACE.org.yaml.snakeyaml')
+    relocate('snw.kookbc','com.xiaoace.snw.kookbc')
+    relocate('com.google.gson','com.xiaoace.com.google.gson')
+    relocate('org.yaml.snakeyaml', 'com.xiaoace.org.yaml.snakeyaml')
+    relocate('org.spongepowered', 'com.xiaoace.org.spongepowered')
     finalizedBy 'reobfShadowJar'
 }
 

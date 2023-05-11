@@ -1,5 +1,6 @@
 package com.xiaoace.mctokook;
 
+import com.xiaoace.mctokook.emoji.EmojiHandler;
 import com.xiaoace.mctokook.listener.KookListener;
 import com.xiaoace.mctokook.listener.minecraft.OnPlayerJoin;
 import com.xiaoace.mctokook.listener.minecraft.OnPlayerMessage;
@@ -49,7 +50,10 @@ public class McToKook {
         return kbcClient;
     }
 
-    public static Logger logger = LogManager.getLogger();
+    public static Logger logger = LogManager.getLogger("McToKook");
+
+    //让xiaoACE emo的 emoji
+    private EmojiHandler emojiHandler;
 
     //主类实例工厂
     @Mod.Instance(MOD_ID)
@@ -59,6 +63,8 @@ public class McToKook {
     public void preinit(FMLPreInitializationEvent event) {
 
         logger.info("Hello Forge! Here is McToKooK");
+
+        emojiHandler = new EmojiHandler(this);
 
         if (!configFolder.exists()) {
             configFolder.mkdir();
@@ -94,7 +100,7 @@ public class McToKook {
 
         //注册KOOK消息监听器
         //夏夜说: 不要用InternalPlugin,但是我摆了！
-        kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(), new KookListener());
+        kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(), new KookListener(this));
     }
 
     @Mod.EventHandler
@@ -104,7 +110,7 @@ public class McToKook {
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent event) {
 
-        MinecraftForge.EVENT_BUS.register(new OnPlayerMessage());
+        MinecraftForge.EVENT_BUS.register(new OnPlayerMessage(this));
         MinecraftForge.EVENT_BUS.register(new OnPlayerJoin());
         MinecraftForge.EVENT_BUS.register(new OnPlayerQuit());
     }
@@ -131,5 +137,9 @@ public class McToKook {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public EmojiHandler getEmojiHandler(){
+        return emojiHandler;
     }
 }
