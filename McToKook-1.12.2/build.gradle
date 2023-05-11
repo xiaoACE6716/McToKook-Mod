@@ -100,6 +100,8 @@ jar {
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
+    exclude('org/spongepowered/')
+    exclude('META-INF/versions/')
     relocate('snw.kookbc','com.xiaoACE.snw.kookbc')
     relocate('com.google.gson','com.xiaoACE.com.google.gson')
     relocate('org.yaml.snakeyaml', 'com.xiaoACE.org.yaml.snakeyaml')
