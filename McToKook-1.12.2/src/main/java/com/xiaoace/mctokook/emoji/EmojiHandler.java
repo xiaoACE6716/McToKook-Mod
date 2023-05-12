@@ -9,14 +9,14 @@ import java.util.LinkedHashMap;
 
 public class EmojiHandler {
 
-    private final LinkedHashMap<String,Character> emojis;
+    private final LinkedHashMap<String, Character> emojis;
     private final McToKook mod;
 
-    public LinkedHashMap<String,Character> getEmojis(){
+    public LinkedHashMap<String, Character> getEmojis() {
         return emojis;
     }
 
-    public EmojiHandler(McToKook mod){
+    public EmojiHandler(McToKook mod) {
         this.mod = mod;
 
         emojis = new LinkedHashMap<String, Character>();
@@ -24,16 +24,16 @@ public class EmojiHandler {
         load(mod);
     }
 
-    public void disable(){
+    public void disable() {
         emojis.clear();
     }
 
-    public void load(McToKook mod){
+    public void load(McToKook mod) {
         disable();
         loadEmojis();
     }
 
-    private void loadEmojis(){
+    private void loadEmojis() {
 
         char emojiChar = '가';
 
@@ -41,23 +41,23 @@ public class EmojiHandler {
             InputStream listInput = getClass().getResourceAsStream("/list.txt");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(listInput));
             String line;
-            while ((line = bufferedReader.readLine()) != null){
-                if (line.startsWith("#")){
+            while ((line = bufferedReader.readLine()) != null) {
+                if (line.startsWith("#")) {
                     continue;
                 }
                 emojis.put(line, emojiChar++);
             }
             bufferedReader.close();
             listInput.close();
-        }catch (Exception e){
+        } catch (Exception e) {
             McToKook.logger.warn("An error occurred while loading emojis. More info below.");
             e.printStackTrace();
         }
 
     }
 
-    public String toEmoji(String message){
-        for (String key : getEmojis().keySet()){
+    public String toEmoji(String message) {
+        for (String key : getEmojis().keySet()) {
             message = message.replace(key, getEmojis().get(key).toString());
         }
         return message;

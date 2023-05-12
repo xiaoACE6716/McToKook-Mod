@@ -1,0 +1,11 @@
+modLoader = "javafml"
+loaderVersion = "[36,)"
+license = "All Rights Reserved"
+[[mods]]
+modId = "mctokook" #mandatory
+version = "${file.jarVersion}"
+displayName = "McToKook-1.16.5"
+authors = "xiaoACE"
+description = '''
+这是一个可以让MC的聊天与指定的一个Kook服务器的频道互通的mcmod 版本: 1.16.5
+'''

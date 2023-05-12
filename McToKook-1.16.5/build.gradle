@@ -14,14 +14,14 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 
+group = 'com.xiaoace'
 version = '1.0'
-group = 'com.xiaoACE'
 archivesBaseName = 'McToKook'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
 minecraft {
-    mappings channel: 'stable', version: '39-1.12'
+    mappings channel: 'snapshot', version: '20210309-1.16.5'
     runs {
         client {
             workingDirectory project.file('run')
@@ -49,7 +49,7 @@ minecraft {
             workingDirectory project.file('run')
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            args '--mod', 'mctokook', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'mctokook-1.16.5', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
             mods {
                 mctokook {
                     source sourceSets.main
@@ -74,7 +74,7 @@ configurations {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+    minecraft 'net.minecraftforge:forge:1.16.5-36.2.34'
     shade 'com.github.SNWCreations:Kookbc:0.26.13'
     shade 'com.vdurmont:emoji-java:5.1.1'
     shade 'cn.hutool:hutool-all:5.8.18'
@@ -88,7 +88,7 @@ jar {
     archiveClassifier = 'slim'
     manifest {
         attributes([
-                "Specification-Title"     : "mctokook",
+                "Specification-Title"     : "mctokook-1.16.5",
                 "Specification-Vendor"    : "xiaoACE",
                 "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
@@ -116,3 +116,4 @@ assemble.dependsOn shadowJar
 reobf {
     shadowJar {}
 }
+
