@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 
-version = '1.0'
+version = '1.12.2-1.0'
 group = 'com.xiaoACE'
 archivesBaseName = 'McToKook'
 
@@ -75,7 +75,9 @@ configurations {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
-    shade 'com.github.SNWCreations:Kookbc:0.26.13'
+    shade 'com.github.SNWCreations:Kookbc:0.26.13',{
+        exclude group: 'net.fabricmc' ,module: 'sponge-mixin'
+    }
     shade 'com.vdurmont:emoji-java:5.1.1'
     shade 'cn.hutool:hutool-all:5.8.18'
 }
@@ -102,7 +104,6 @@ jar {
 shadowJar {
     archiveClassifier = ''
     configurations = [project.configurations.shade]
-    exclude('org/spongepowered/')
     exclude('META-INF/versions/')
     relocate('snw.kookbc','com.xiaoace.snw.kookbc')
     relocate('com.google.gson','com.xiaoace.com.google.gson')
