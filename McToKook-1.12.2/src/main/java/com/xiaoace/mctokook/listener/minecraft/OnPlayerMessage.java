@@ -2,8 +2,6 @@ package com.xiaoace.mctokook.listener.minecraft;
 
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import snw.jkook.entity.channel.Channel;

@@ -40,8 +40,8 @@ public class McToKook {
     public static final String VERSION = "1.0";
     public static final boolean serverSideOnly = true;
 
-    private static File kbcSetting = new File(".", "config/McToKook/kbc.yml");
-    private static File configFolder = new File(".", "config/McToKook");
+    private static final File kbcSetting = new File(".", "config/McToKook/kbc.yml");
+    private static final File configFolder = new File(".", "config/McToKook");
 
     static KBCClient kbcClient = null;
 
