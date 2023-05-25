@@ -1,7 +1,7 @@
 # McToKook-Mod
 
 这是一个可以让MC的聊天与指定的一个KOOK服务器频道互通的MC Forge Mod \
-支持版本：目前只有Minecraft 1.12.2 \
+支持版本：目前已支持Minecraft 1.12.2 与Minecraft 1.16.5\
 基于Forge 与 JKook api 与 KookBC 
 
 ## Mod的食用方法
@@ -12,7 +12,7 @@
 填写完毕后再次启动服务端，本Mod就会正常运作 \
 ### PS：本Mod为服务端Mod 在玩家客户端上不会加载 
 ### PSP: 为了获取更好的游戏体验，1.12.2版本的用户请在客户端安装本仓库根目录下的Emoji Chat Resource Pack 1.13-.zip材质包 以获得最佳体验~
-### PSPP: 你说1.12.2以后的版本?请在客户端安装[Modern UI](https://mcmod.cn/class/2454.html) 以获得最佳体验~
+### PSPP: 你说1.12.2以后的版本?请在客户端安装[Modern UI](https://mcmod.cn/class/2454.html)或者安装本仓库根目录下的twemoji-emojies.zip材质包 以获得最佳体验~
 
 ## bot_token的获取方式
 访问[kook开发者中心](https://developer.kookapp.cn/app/index)，
@@ -30,7 +30,8 @@
 ## 感谢
 感谢[RealSeek](https://github.com/RealSeek)帮助本项目进行Gradle调优 \
 感谢[ZX夏夜之风](https://github.com/SNWCreations)开发的[KookBC](https://github.com/SNWCreations/KookBC) \
-感谢[RadBuilder](https://github.com/RadBuilder)的[Emoji Chat](https://github.com/RadBuilder/EmojiChat)项目 
+感谢[RadBuilder](https://github.com/RadBuilder)的[Emoji Chat](https://github.com/RadBuilder/EmojiChat)项目 \
+感谢[Luna Le Tuna](https://www.youtube.com/channel/UCarUE396qwSVIJZGVdtUwNQ)制作的[twemoji-emojies](https://www.planetminecraft.com/texture-pack/emojis-in-chat/)材质包
 
 ## 最后
 还有什么问题、想法或建议，请直接与我联系，或者直接在github上开一个issues。
