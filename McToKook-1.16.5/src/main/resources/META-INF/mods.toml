@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[36,)"
 license = "All Rights Reserved"
+issueTrackerURL = "https://github.com/xiaoACE6716/McToKook-Mod/issues"
 [[mods]]
 modId = "mctokook" #mandatory
 version = "${file.jarVersion}"
@@ -9,3 +10,15 @@ authors = "xiaoACE"
 description = '''
 这是一个可以让MC的聊天与指定的一个Kook服务器的频道互通的mcmod 版本: 1.16.5
 '''
+[[dependencies.mctokook]]
+modId = "forge"
+mandatory = true
+ordering="NONE"
+versionRange = "[36,)"
+side = "SERVER"
+[[dependencies.mctokook]]
+modId = "minecraft"
+mandatory = true
+ordering="NONE"
+versionRange = "[1.16,)"
+side = "SERVER"

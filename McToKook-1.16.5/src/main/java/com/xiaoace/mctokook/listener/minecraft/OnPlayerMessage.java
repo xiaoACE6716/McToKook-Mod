@@ -3,18 +3,14 @@ package com.xiaoace.mctokook.listener.minecraft;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.config.Config;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.KBCClient;
 
 import java.util.concurrent.CompletableFuture;
 
-@Mod.EventBusSubscriber(modid = McToKook.MOD_ID)
 public class OnPlayerMessage {
 
-    @SubscribeEvent
     public static void onChat(ServerChatEvent event) {
 
         if (!Config.to_Kook.get()) {

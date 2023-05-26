@@ -1,6 +1,5 @@
 package com.xiaoace.mctokook.listener;
 
-import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.config.Config;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
@@ -39,10 +38,6 @@ public class KookListener implements Listener {
             //没错，只有文字消息会被发到mc
             if (component instanceof TextComponent){
 
-                TextComponent textComponent = (TextComponent) component;
-
-                //先将kook的消息里的emoji转换成短码形式
-                //String the_message_from_kook = EmojiUtil.toAlias(component.toString());
                 String the_message_from_kook = component.toString();
 
                 String needFormatMessage = Config.to_Minecraft_Message.get();

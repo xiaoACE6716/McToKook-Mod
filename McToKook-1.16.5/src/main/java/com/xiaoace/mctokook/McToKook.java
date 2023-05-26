@@ -2,6 +2,10 @@ package com.xiaoace.mctokook;
 
 import com.xiaoace.mctokook.config.Config;
 import com.xiaoace.mctokook.listener.KookListener;
+import com.xiaoace.mctokook.listener.minecraft.OnPlayerJoin;
+import com.xiaoace.mctokook.listener.minecraft.OnPlayerMessage;
+import com.xiaoace.mctokook.listener.minecraft.OnPlayerQuit;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -10,6 +14,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartedEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import snw.jkook.JKook;
@@ -27,7 +32,7 @@ public class McToKook {
 
     public static final String MOD_ID = "mctokook";
 
-    private static final Logger LOGGER = LogManager.getLogger("McToKook");
+    public static Logger LOGGER = LogManager.getLogger("McToKook");
 
     private static final File kbcSetting = new File(".", "config/McToKook/kbc.yml");
     private static final File configFolder = new File(".", "config/McToKook");
@@ -40,6 +45,12 @@ public class McToKook {
 
     public McToKook(){
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER){
+            MinecraftForge.EVENT_BUS.addListener(OnPlayerMessage::onChat);
+            MinecraftForge.EVENT_BUS.addListener(OnPlayerJoin::onPlayerJoin);
+            MinecraftForge.EVENT_BUS.addListener(OnPlayerQuit::onPlayerQuit);
+        }
         MinecraftForge.EVENT_BUS.register(this);
     }
 
@@ -51,8 +62,6 @@ public class McToKook {
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event){
         LOGGER.info("Hello Server! Here is McToKook");
-
-
     }
 
     @SubscribeEvent
@@ -92,8 +101,6 @@ public class McToKook {
         //注册KOOK消息监听器
         //夏夜说: 不要用InternalPlugin,但是我摆了！
         kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(), new KookListener());
-        //((TextChannel)kbcClient.getCore().getHttpAPI().getChannel(Config.channel_ID.get())).sendComponent("服务器上线了");
-
     }
 
     private static void saveKBCConfig() {
