@@ -18,7 +18,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 
 group = 'com.xiaoace'
-version = '1.16.5-1.0'
+version = '1.16.5-1.1'
 archivesBaseName = 'McToKook'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
