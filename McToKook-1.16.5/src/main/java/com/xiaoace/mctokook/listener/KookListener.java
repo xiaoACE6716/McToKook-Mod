@@ -16,16 +16,16 @@ import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecra
 public class KookListener implements Listener {
 
     @EventHandler
-    public void onKookMessage(ChannelMessageEvent event){
+    public void onKookMessage(ChannelMessageEvent event) {
 
-        if (!Config.to_Minecraft.get()){
+        if (!Config.to_Minecraft.get()) {
             return;
         }
 
         User kookUser;
         TextChannelMessage kookMessage;
 
-        if (event.getChannel().getId().equals(Config.channel_ID.get())){
+        if (event.getChannel().getId().equals(Config.channel_ID.get())) {
 
             //Kook消息发送者
             kookUser = event.getMessage().getSender();
@@ -36,7 +36,7 @@ public class KookListener implements Listener {
             BaseComponent component = kookMessage.getComponent();
             //将要发送至mc里的消息
             //没错，只有文字消息会被发到mc
-            if (component instanceof TextComponent){
+            if (component instanceof TextComponent) {
 
                 String the_message_from_kook = component.toString();
 
@@ -48,7 +48,7 @@ public class KookListener implements Listener {
 
                 StringTextComponent message = new StringTextComponent(formattedMessage);
 
-                ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> player.sendMessage(message,player.getUniqueID()));
+                ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> player.sendMessage(message, player.getUniqueID()));
 
             }
         }

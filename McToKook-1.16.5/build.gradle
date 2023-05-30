@@ -18,7 +18,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'java'
 
 group = 'com.xiaoace'
-version = '1.16.5-1.1'
+version = '1.16.5-1.2'
 archivesBaseName = 'McToKook'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -81,8 +81,7 @@ dependencies {
     shade 'com.github.SNWCreations:Kookbc:0.26.13',{
         exclude group: 'net.fabricmc' ,module: 'sponge-mixin'
     }
-    //shade 'com.vdurmont:emoji-java:5.1.1'
-    //shade 'cn.hutool:hutool-all:5.8.18'
+    shade 'cn.hutool:hutool-all:5.8.18'
 }
 
 tasks.withType(JavaCompile).configureEach {

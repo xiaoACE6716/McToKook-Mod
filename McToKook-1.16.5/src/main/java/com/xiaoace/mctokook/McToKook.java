@@ -43,10 +43,10 @@ public class McToKook {
         return kbcClient;
     }
 
-    public McToKook(){
+    public McToKook() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.COMMON_CONFIG);
 
-        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER){
+        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER) {
             MinecraftForge.EVENT_BUS.addListener(OnPlayerMessage::onChat);
             MinecraftForge.EVENT_BUS.addListener(OnPlayerJoin::onPlayerJoin);
             MinecraftForge.EVENT_BUS.addListener(OnPlayerQuit::onPlayerQuit);
@@ -60,12 +60,12 @@ public class McToKook {
     }
 
     @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event){
+    public void onServerStarting(FMLServerStartingEvent event) {
         LOGGER.info("Hello Server! Here is McToKook");
     }
 
     @SubscribeEvent
-    public void onServerStarted(FMLServerStartedEvent event){
+    public void onServerStarted(FMLServerStartedEvent event) {
 
         if (!configFolder.exists()) {
             configFolder.mkdir();

@@ -13,12 +13,12 @@ description = '''
 [[dependencies.mctokook]]
 modId = "forge"
 mandatory = true
-ordering="NONE"
+ordering = "NONE"
 versionRange = "[36,)"
 side = "SERVER"
 [[dependencies.mctokook]]
 modId = "minecraft"
 mandatory = true
-ordering="NONE"
+ordering = "NONE"
 versionRange = "[1.16,)"
 side = "SERVER"
