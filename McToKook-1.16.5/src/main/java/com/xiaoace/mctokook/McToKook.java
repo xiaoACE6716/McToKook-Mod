@@ -1,5 +1,6 @@
 package com.xiaoace.mctokook;
 
+import com.xiaoace.mctokook.commands.KookCommands;
 import com.xiaoace.mctokook.config.Config;
 import com.xiaoace.mctokook.listener.KookListener;
 import com.xiaoace.mctokook.listener.minecraft.OnPlayerJoin;
@@ -101,6 +102,8 @@ public class McToKook {
         //注册KOOK消息监听器
         //夏夜说: 不要用InternalPlugin,但是我摆了！
         kbcClient.getCore().getEventManager().registerHandlers(kbcClient.getInternalPlugin(), new KookListener());
+        //注册KOOK指令
+        kbcClient.getCore().getCommandManager().registerCommand(kbcClient.getInternalPlugin(), new KookCommands().list);
     }
 
     private static void saveKBCConfig() {
