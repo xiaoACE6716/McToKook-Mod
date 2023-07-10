@@ -1,5 +1,7 @@
 package com.xiaoace.mctokook.listener.minecraft;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
 import net.minecraftforge.event.ServerChatEvent;
@@ -8,39 +10,32 @@ import snw.jkook.entity.channel.Channel;
 import snw.jkook.entity.channel.TextChannel;
 import snw.kookbc.impl.KBCClient;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class OnPlayerMessage {
 
     static KBCClient kbcClient = McToKook.getKbcClient();
-    private final McToKook mod;
-
-    public OnPlayerMessage(McToKook mod){
-        this.mod = mod;
-    }
 
     @SubscribeEvent
     public void onChat(ServerChatEvent event) {
 
+        if (!Settings.to_Kook){
+            return;
+        }
+
         CompletableFuture.runAsync(() -> {
-
-            String message = event.getMessage();
-            String playerName = event.getUsername();
-
-            //测试用的
-            McToKook.logger.info("来自游戏内的消息: " + message);
-
-            String needFormatMessage = Settings.to_Kook_Message;
-
-            String formattedMessage = needFormatMessage
-                    .replaceAll("\\{playerName}", playerName)
-                    .replaceAll("\\{message}", message);
-
             Channel channel = kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
-
             if (channel instanceof TextChannel) {
+
+                Map<String, String> map = MapUtil.builder(new HashMap<String, String>())
+                        .put("playerName", event.getUsername())
+                        .put("message", event.getMessage())
+                        .map();
+
                 TextChannel textChannel = (TextChannel) channel;
-                textChannel.sendComponent(formattedMessage);
+                textChannel.sendComponent(StrUtil.format(Settings.to_Kook_Message, map));
             }
         });
     }
