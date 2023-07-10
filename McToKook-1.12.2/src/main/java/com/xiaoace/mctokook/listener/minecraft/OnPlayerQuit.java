@@ -1,5 +1,7 @@
 package com.xiaoace.mctokook.listener.minecraft;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,6 +18,8 @@ import snw.jkook.message.component.card.element.MarkdownElement;
 import snw.jkook.message.component.card.module.SectionModule;
 import snw.kookbc.impl.KBCClient;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static com.xiaoace.mctokook.utils.PlayerIcon.getPlayerIconUr;
@@ -33,33 +37,28 @@ public class OnPlayerQuit {
 
         CompletableFuture.runAsync(() -> {
 
-            String playerName = loggedOutEvent.player.getName();
-            String playerUUID = loggedOutEvent.player.getGameProfile().getId().toString();
-
             Channel channel = kbcClient.getCore().getHttpAPI().getChannel(Settings.channel_ID);
 
             if (channel instanceof TextChannel) {
                 TextChannel textChannel = (TextChannel) channel;
-                textChannel.sendComponent(buildCard(playerName,playerUUID));
+                textChannel.sendComponent(buildCard(loggedOutEvent.player.getName(), loggedOutEvent.player.getGameProfile().getId().toString()));
             }
         });
     }
 
     private static MultipleCardComponent buildCard(String playerName, String playerUUID) {
 
-        String needFormatMessage = Settings.player_Quit_Message;
-        String formattedMessage = needFormatMessage.replaceAll("\\{playerName}", playerName);
-        String imageUrl = getPlayerIconUr(playerUUID);
-        CardBuilder cardBuilder = new CardBuilder();
-        cardBuilder.setTheme(Theme.DANGER).setSize(Size.LG);
-        cardBuilder.addModule(
-                new SectionModule(
-                        new MarkdownElement(formattedMessage),
-                        new ImageElement(imageUrl, null, Size.SM, false),
-                        Accessory.Mode.LEFT
-                )
-        );
-        return cardBuilder.build();
+        Map<String, String> map = MapUtil.builder(new HashMap<String, String>())
+                .put("playerName", playerName)
+                .map();
+
+        return new CardBuilder().setTheme(Theme.DANGER).setSize(Size.LG)
+                .addModule(new SectionModule(
+                        new MarkdownElement(StrUtil.format(Settings.player_Quit_Message, map)),
+                        new ImageElement(getPlayerIconUr(playerUUID), null, Size.SM, false),
+                        Accessory.Mode.LEFT))
+                .build();
+        
     }
 
 }

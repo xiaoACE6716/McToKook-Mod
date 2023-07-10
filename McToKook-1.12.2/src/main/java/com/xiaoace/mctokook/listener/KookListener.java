@@ -1,5 +1,7 @@
 package com.xiaoace.mctokook.listener;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.emoji.EmojiUtil;
 import com.xiaoace.mctokook.McToKook;
 import com.xiaoace.mctokook.settings.Settings;
@@ -13,13 +15,14 @@ import snw.jkook.message.TextChannelMessage;
 import snw.jkook.message.component.BaseComponent;
 import snw.jkook.message.component.TextComponent;
 
-import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KookListener implements Listener {
 
     private final McToKook mod;
 
-    public KookListener(McToKook mod){
+    public KookListener(McToKook mod) {
         this.mod = mod;
     }
 
@@ -31,12 +34,15 @@ public class KookListener implements Listener {
             return;
         }
 
+        if (channelMessageEvent.getMessage().getSender().isBot()) {
+            return;
+        }
+
         User kookUser = null;
         TextChannelMessage kookMessage = null;
 
         if (channelMessageEvent.getChannel().getId().equals(Settings.channel_ID)) {
 
-            String KookUserUUID = channelMessageEvent.getMessage().getSender().getId();
             //Kook消息发送者
             kookUser = channelMessageEvent.getMessage().getSender();
             kookMessage = channelMessageEvent.getMessage();
@@ -48,25 +54,16 @@ public class KookListener implements Listener {
             //没错，只有文字消息会被发到mc
             if (component instanceof TextComponent) {
 
-                TextComponent textComponent = (TextComponent) component;
-
-                //先将kook的消息里的emoji转换成短码形式
-                String the_message_from_kook = EmojiUtil.toAlias(component.toString());
+                //将kook的消息里的emoji转换成短码形式
                 //然后再将它转成对应的韩文
-                the_message_from_kook = mod.getEmojiHandler().toEmoji(the_message_from_kook);
+                String the_message_from_kook = mod.getEmojiHandler().toEmoji(EmojiUtil.toAlias(component.toString()));
 
-                //测试用的
-                McToKook.logger.info("来自KOOK的消息: " + textComponent);
+                Map<String, String> map = MapUtil.builder(new HashMap<String, String>())
+                        .put("nickName", kookUserNickName)
+                        .put("message", the_message_from_kook)
+                        .map();
 
-                String needFormatMessage = Settings.to_Minecraft_Message;
-
-                String formattedMessage = needFormatMessage
-                        .replaceAll("\\{nickName}", kookUserNickName)
-                        .replaceAll("\\{message}", convertToMinecraftFormat(the_message_from_kook));
-
-                TextComponentString message = new TextComponentString(formattedMessage);
-
-                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(message);
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentString(StrUtil.format(Settings.to_Minecraft_Message, map)));
             }
         }
     }

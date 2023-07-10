@@ -1,17 +1,18 @@
 package com.xiaoace.mctokook.listener;
 
+import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.StrUtil;
 import com.xiaoace.mctokook.config.Config;
 import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
-import snw.jkook.entity.User;
 import snw.jkook.event.EventHandler;
 import snw.jkook.event.Listener;
 import snw.jkook.event.channel.ChannelMessageEvent;
-import snw.jkook.message.TextChannelMessage;
 import snw.jkook.message.component.BaseComponent;
 import snw.jkook.message.component.TextComponent;
 
-import static com.xiaoace.mctokook.utils.MinecraftTextConverter.convertToMinecraftFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class KookListener implements Listener {
 
@@ -22,34 +23,24 @@ public class KookListener implements Listener {
             return;
         }
 
-        User kookUser;
-        TextChannelMessage kookMessage;
+        if (event.getMessage().getSender().isBot()) {
+            return;
+        }
 
         if (event.getChannel().getId().equals(Config.channel_ID.get())) {
 
-            //Kook消息发送者
-            kookUser = event.getMessage().getSender();
-            kookMessage = event.getMessage();
+            BaseComponent component = event.getMessage().getComponent();
 
-            String kookUserNickName = kookUser.getNickName(event.getChannel().getGuild());
-
-            BaseComponent component = kookMessage.getComponent();
-            //将要发送至mc里的消息
-            //没错，只有文字消息会被发到mc
             if (component instanceof TextComponent) {
 
-                String the_message_from_kook = component.toString();
+                Map<String,String> map = MapUtil.builder(new HashMap<String, String>())
+                        .put("nickName", event.getMessage().getSender().getNickName(event.getChannel().getGuild()))
+                        .put("message", component.toString())
+                        .map();
 
-                String needFormatMessage = Config.to_Minecraft_Message.get();
-
-                String formattedMessage = needFormatMessage
-                        .replaceAll("\\{nickName}", kookUserNickName)
-                        .replaceAll("\\{message}", convertToMinecraftFormat(the_message_from_kook));
-
-                StringTextComponent message = new StringTextComponent(formattedMessage);
-
-                ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> player.sendMessage(message, player.getUniqueID()));
-
+                ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> player.sendMessage(
+                        new StringTextComponent(StrUtil.format(Config.to_Minecraft_Message.get(),map)),
+                        player.getUniqueID()));
             }
         }
 

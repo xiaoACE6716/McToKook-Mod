@@ -113,7 +113,7 @@ public class McToKook {
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent event) {
 
-        MinecraftForge.EVENT_BUS.register(new OnPlayerMessage(this));
+        MinecraftForge.EVENT_BUS.register(new OnPlayerMessage());
         MinecraftForge.EVENT_BUS.register(new OnPlayerJoin());
         MinecraftForge.EVENT_BUS.register(new OnPlayerQuit());
     }
