@@ -19,14 +19,13 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import snw.jkook.JKook;
+import snw.jkook.config.InvalidConfigurationException;
 import snw.jkook.config.file.YamlConfiguration;
 import snw.kookbc.impl.CoreImpl;
 import snw.kookbc.impl.KBCClient;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 @Mod(McToKook.MOD_ID)
 public class McToKook {
@@ -34,9 +33,6 @@ public class McToKook {
     public static final String MOD_ID = "mctokook";
 
     public static Logger LOGGER = LogManager.getLogger("McToKook");
-
-    private static final File kbcSetting = new File(".", "config/McToKook/kbc.yml");
-    private static final File configFolder = new File(".", "config/McToKook");
     static KBCClient kbcClient = null;
 
     //提供一个get KookBC的方法
@@ -68,12 +64,9 @@ public class McToKook {
     @SubscribeEvent
     public void onServerStarted(FMLServerStartedEvent event) {
 
-        if (!configFolder.exists()) {
-            configFolder.mkdir();
-        }
         //KookBC保存基础配置文件
-        saveKBCConfig();
         YamlConfiguration config = new YamlConfiguration();
+        saveKBCConfig(config);
 
         CoreImpl core = new CoreImpl();
         JKook.setCore(core);
@@ -106,24 +99,35 @@ public class McToKook {
         kbcClient.getCore().getCommandManager().registerCommand(kbcClient.getInternalPlugin(), new KookCommands().list);
     }
 
-    private static void saveKBCConfig() {
+    /**
+     * 传入一个 config,使用 stream 读取
+     * @param config
+     * @author RealSeek
+     */
+    private static void saveKBCConfig(YamlConfiguration config) {
         try (final InputStream stream = McToKook.class.getResourceAsStream("/kbc.yml")) {
             if (stream == null) {
                 throw new Error("Unable to find kbc.yml");
             }
-            if (kbcSetting.exists()) {
-                return;
-            }
-            //noinspection ResultOfMethodCallIgnored
-            kbcSetting.createNewFile();
 
-            try (final FileOutputStream out = new FileOutputStream(kbcSetting)) {
-                int index;
-                byte[] bytes = new byte[1024];
-                while ((index = stream.read(bytes)) != -1) {
-                    out.write(bytes, 0, index);
+            StringBuilder yamlContentBuilder = new StringBuilder();
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    yamlContentBuilder.append(line).append(System.lineSeparator());
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+
+            String yamlContent = yamlContentBuilder.toString();
+
+            try {
+                config.loadFromString(yamlContent);
+            } catch (InvalidConfigurationException e) {
+                e.printStackTrace();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
